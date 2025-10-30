@@ -1,0 +1,18 @@
+{% extends 'aplicatie_exemplu/baza.html' %} {% block content %} {%load static%}
+<link rel="stylesheet" href="{% static 'aplicatie_exemplu/css/despre.css' %}" />
+<h1>Despre:</h1>
+<p>
+  Amigurumi este arta japoneză de a croșeta (sau, mai rar, tricota) mici
+  creaturi sau obiecte. Caracteristica definitorie este stilul "kawaii"
+  (drăguț), obținut adesea prin capete mari și corpuri mici. Părțile sunt
+  lucrate în spirală, umplute cu vatelina și apoi cusute împreună pentru a forma
+  animale, personaje sau chiar alimente cu fețe zâmbitoare.
+</p>
+<div class="container1">
+  <img
+    src="{% static 'aplicatie_exemplu/images/amigurumi_12.jpg' %}"
+    alt="Amigurumi Toy 2"
+  />
+  <div class="gallery-item-title">Creator: Nicoleta</div>
+</div>
+{% endblock %}

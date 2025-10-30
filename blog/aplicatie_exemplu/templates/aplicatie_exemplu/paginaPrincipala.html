@@ -1,0 +1,38 @@
+{% extends 'aplicatie_exemplu/baza.html' %}
+
+{% load static %}
+
+{% block title %}Acasă - Amigurumi World{% endblock %}
+
+{% block content %}
+
+    <section class="hero">
+        <div class="container">
+            <h2>Made with Love & Yarn</h2>
+            <p>Welcome to a magical world of handmade crochet toys. Each one has a unique personality and is waiting to be loved.</p>
+        </div>
+    </section>
+
+    <section class="gallery-container">
+        <div class="container">
+            <h3>Our Little Friends</h3>
+            <div class="gallery-grid">
+                
+                <div class="gallery-item">
+                    <img src="{% static 'aplicatie_exemplu/images/amigurumi_1.jpg' %}" alt="Amigurumi Toy 1">
+                    <div class="gallery-item-title">Cute Bear</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="{% static 'aplicatie_exemplu/images/amigurumi_2.jpg' %}" alt="Amigurumi Toy 2">
+                    <div class="gallery-item-title">Sleepy Fox</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="{% static 'aplicatie_exemplu/images/amigurumi_9.jpg' %}" alt="Amigurumi Toy 9">
+                    <div class="gallery-item-title">Giraffe</div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

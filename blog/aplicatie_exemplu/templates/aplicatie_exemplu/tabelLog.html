@@ -1,0 +1,56 @@
+{% extends 'aplicatie_exemplu/baza.html' %}
+{%load static%} 
+{% block content %}
+<link rel="stylesheet" href="{% static 'aplicatie_exemplu/css/tabel.css' %}" />
+<div class="log-page-container">
+  <h2>Tabel Log Accesari</h2>
+
+  <div class="tabel-container">
+    <table class="log-table">
+      <thead>
+        <tr>
+          {% for antet in antete %}
+          <th>{{ antet }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for log in randuri %}
+        <tr>
+          {% for numar in definire %} {% if numar == 0 %}
+          <td>{{ log.id }}</td>
+          {% elif numar == 1 %}
+          <td>{{ log.ip_client }}</td>
+          {% elif numar == 2 %}
+          <td>{{ log.url }}</td>
+          {% elif numar == 3 %}
+          <td>{{ log.data }}</td>
+          {% endif %} {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if erori %}
+  <div id="erori">
+    <h3>Erori:</h3>
+    {% for eroare in erori %}
+    <p>{{ eroare }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="statistici">
+    <p>Cele mai putin accesate pagini:</p>
+    {% for url in putin_accesate %}
+    <p class="url-item">{{ url }}</p>
+    {% endfor %}
+
+    <br />
+    <p>Cele mai mult accesate pagini:</p>
+    {% for url in mult_accesate %}
+    <p class="url-item">{{ url }}</p>
+    {% endfor %}
+  </div>
+{% endblock %}
+

@@ -1,0 +1,93 @@
+/* ======== STILURI PENTRU PAGINA DE LOG ======== */
+
+/* Container pentru a centra conținutul paginii de log */
+.log-page-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 2rem auto; /* Adaugă spațiu sus și jos */
+}
+
+/* Containerul pentru tabel, îl face responsiv pe mobil */
+.tabel-container {
+    width: 100%;
+    overflow-x: auto; /* Adaugă scroll orizontal dacă tabelul e prea lat */
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    overflow: hidden; /* Ascunde colțurile tabelei pentru a păstra border-radius */
+}
+
+.log-table {
+    width: 100%;
+    border-collapse: collapse; /* Cheia pentru un tabel "curat" */
+}
+
+/* Stilul pentru Antetul Tabelului (th) */
+.log-table thead tr {
+    background-color: #f2a2b9; /* Rozul din footer-ul tău */
+    color: #fff; /* Text alb */
+    text-align: center; /* Text centrat, cum ai cerut */
+}
+
+.log-table th {
+    padding: 15px 20px;
+    font-size: 1.1rem;
+}
+
+/* Stilul pentru Celulele Tabelului (td) */
+.log-table td {
+    padding: 12px 20px;
+    text-align: center; /* Text centrat, cum ai cerut */
+    border-bottom: 1px solid #fde4e8; /* Linie despărțitoare roz pal */
+}
+
+/* Stil pentru rândurile pare (zebra striping) - ușurează citirea */
+.log-table tbody tr:nth-of-type(even) {
+    background-color: #fdf6f7; /* Fundalul paginii tale */
+}
+
+/* Efect la hover - face tabelul interactiv */
+.log-table tbody tr:hover {
+    background-color: #fde4e8; /* Rozul pal la hover */
+    color: #e88fab; /* Textul devine roz închis */
+}
+
+/* Stil pentru secțiunea de Erori */
+#erori {
+    background-color: #fff0f0; /* Fundal roșu foarte deschis */
+    border: 1px solid #e88fab; /* Border roz */
+    color: #d93050; /* Text roșu închis */
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 2rem;
+}
+
+#erori h3 {
+    color: #d93050;
+    margin-bottom: 0.5rem;
+}
+
+/* Stil pentru secțiunile de statistici (cele mai/puțin accesate) */
+.statistici {
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem 2rem;
+    margin-top: 2rem;
+}
+
+.statistici p {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #e88fab;
+    margin-bottom: 0.5rem;
+}
+
+/* Stilizează URL-urile din statistici */
+.statistici .url-item {
+    font-weight: normal;
+    color: #5c5c5c;
+    font-size: 1rem;
+    padding-left: 1rem;
+    margin-bottom: 0.25rem;
+}

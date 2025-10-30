@@ -1,0 +1,63 @@
+{% extends 'aplicatie_exemplu/baza.html' %}
+
+{% block title %}Log
+Accesari{%endblock %} {% block page_header %}Pagina Log Accesari{% endblock %}
+{% block content %}
+{%if 'accesari' in numar_parametrii%}
+<div id="accesare">
+  <p>Numarul de accesari :{{numar_accesari}}</p>
+</div>
+{%endif%}
+<div id="parametri">
+  {%if 'parametri' in numar_parametrii%}
+  <p>Numar Parametri: {{numar_parametrii.0}}</p>
+    <ul>
+        {% for p in numar_parametrii|slice:"1:" %}
+        <li>{{p}}</li>
+        {% endfor %}
+    </ul>
+</div>
+{%endif%}
+<div id='detalii'>
+  <h3>Detalii Accesari:</h3>
+  <ul>
+    {% for detaliu in detalii_accesari %}
+    {%if 'detalii' in numar_parametrii%}
+    <li>{{ detaliu }}</li>
+    {%else%}
+    <li>{{detaliu.show_non_detalii}}</li>
+    {%endif%}
+
+    {% endfor %}
+  </ul>
+</div>
+<div id='erori'>
+ 
+  <h3>Erori:</h3>
+  {% for eroare in erori %}
+  <p>{{ eroare }}</p>
+  {% endfor %}
+</div>
+
+
+<div id='statistici'>
+
+  <h3>Statistici:</h3>
+  <p>Cele mai putin accesate pagini:</p>
+  <ul>
+    {% for stat in putin_accesate%}
+    <li>{{ stat }}</li>
+    {% endfor %}
+  </ul>
+  
+    <p>Cele mai mult accesate pagini:</p>
+  <ul>
+    {% for stat in mult_accesate%}
+    <li>{{ stat }}</li>
+    {% endfor %}
+  </ul>
+</div>
+
+
+
+{% endblock %}

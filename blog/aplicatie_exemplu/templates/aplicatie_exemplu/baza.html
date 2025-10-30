@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <title>
+        {% block title %}Amigurumi World{% endblock %}
+    </title>
+    
+    <link rel="stylesheet" href="{% static 'aplicatie_exemplu/css/style.css' %}" />
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <h1>Amigurumi World</h1>
+            <nav class="nav">
+                <a href="{% url 'index' %}">Acasa</a>
+                <a href="{% url 'info' %}">Info</a>
+                <a href="{% url 'contact' %}">Contact</a>
+                <a href="{% url 'despre' %}">Despre</a>
+                <a href="{% url 'produs' %}">Produs</a>
+                <a href="{% url 'cos_virtual' %}">Cosul Tau</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Amigurumi World. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
