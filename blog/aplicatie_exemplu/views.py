@@ -16,16 +16,14 @@ def tabel_procesare(tabel):
         elif col == 'data':
             definitor.append(3)
     return definitor,tabel
-def afisare_parametri(parametri,log_list,nr_accesari):
+def afisare_parametri(log_list,nr_accesari):
     parametrii = log_list[-1].lista_parametrii() if nr_accesari>0 else []
     nr_parametrii = len(parametrii)
     response_content =[nr_parametrii]
     for p in parametrii:
         response_content.append(p)
     return response_content
-def afisare_accesari(accesari,nr_accesari):
-    if accesari is not None or accesari=="":
-        return nr_accesari
+
     
 def parsare_ids(id_uri,duplicate):
     id_uri = list(','.join(id_uri).split(',')) if id_uri else None
@@ -55,6 +53,7 @@ def lowest_most_visited(log_list):
 from django.http import HttpResponse
 def info(request):
     return render(request, 'aplicatie_exemplu/info.html')
+
 def index(request):
     return render(request, 'aplicatie_exemplu/paginaPrincipala.html')
 def in_lucru(request):
@@ -75,8 +74,8 @@ def log(request):
     nr_accesari = LogMiddleware.nr_accesari()
     putin_accesate, mult_accesate = lowest_most_visited(log_list)
     informatie_totala={}  
-    informatie_totala['numar_parametrii'] = afisare_parametri(log_list[-1].lista_parametrii(),log_list,nr_accesari)
-    informatie_totala['numar_accesari'] = afisare_accesari(accesari, nr_accesari)
+    informatie_totala['numar_parametrii'] = afisare_parametri(log_list,nr_accesari)
+    informatie_totala['numar_accesari'] = nr_accesari
     informatie_totala['detalii_accesari'] = []
     informatie_totala['erori'] = []
     
