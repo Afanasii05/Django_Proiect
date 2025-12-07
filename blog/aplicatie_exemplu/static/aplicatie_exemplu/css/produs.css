@@ -1,0 +1,147 @@
+
+.header {
+  width: 100%;
+  background-color: transparent; 
+  border-bottom: 2px solid #fde4e8; 
+  padding: 2rem 1rem;
+  margin-top: 1em;
+  margin-bottom: 3em;
+  text-align: center;
+}
+.header h1 {
+  font-weight: 400;
+  color: #e88fab; 
+  font-size: 2.8rem;
+  margin: 0;
+  display: inline-block; 
+  vertical-align: middle;
+}
+.header h1::after {
+  content: "Creații handmade unice";
+  display: block;
+  font-size: 1rem;
+  font-weight: 300;
+  color: #aaa;
+  margin-top: 0.5rem;
+  letter-spacing: 1px;
+}
+h1 {
+  flex-basis: 100%;
+  font-weight: 350;
+  color: #333;
+}
+.cat{
+    font-weight: 100;
+    color: #666;
+    font-size: medium;
+}
+.container_produse {
+  display: flex;
+  height: auto;
+  width: 100%;
+  background-color: aliceblue;
+  gap: 4vw;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin: 5em 0em;
+  padding: 0 1em;
+}
+
+.produs {
+  display: flex;
+  flex-direction: column;
+  width: 19em;
+  background-color: white; 
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease-in-out;
+}
+
+.produs:hover {
+  transform: translateY(-7px) scale(1.006);
+
+}
+
+.imagine_produs {
+  width: 100%;
+  aspect-ratio: 1 / 1.25;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  object-fit: cover;
+  display: block; 
+}
+
+.descriere {
+    padding: 1em;
+    text-align: center;
+}
+.in_stoc{
+    color: green;
+    font-weight:100;
+}
+.out_stoc{
+    color: red;
+    font-weight:100;
+}
+a{
+    text-decoration: none;
+    color:inherit;
+}
+.page_bar{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-wrap: wrap;
+  gap: 1em;
+  margin-top: 2em;
+}
+.pag{
+  flex-basis: 100%;
+  font-size: large;
+}
+.page_button {
+ 
+  border: none;
+  display: inline-block; 
+  text-decoration: none; 
+  
+ 
+  padding: 12px 24px; 
+  font-size: 1rem;     
+  font-weight: 600;     
+  min-width: 120px;  
+  text-align: center;  
+
+  background-color: #f2a2b9;
+  color: #fff;           
+  border-radius: 8px;  
+  cursor: pointer;       
+  
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+
+  transition: background-color 0.2s ease, transform 0.2s ease;
+
+  margin: 0 5px;
+}
+
+
+
+.page_button:hover {
+  background-color: #e88fab;
+  transform: translateY(-2px);
+}
+
+.page_button:active {
+  transform: translateY(1px); 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.indisp{
+  background-color: #cec3c6;
+}
+.indisp:hover{
+  background-color: #9a9999;
+}

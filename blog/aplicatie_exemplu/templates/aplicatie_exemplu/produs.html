@@ -1,1 +1,59 @@
-{% extends 'aplicatie_exemplu/baza.html' %}
+  {% extends 'aplicatie_exemplu/baza.html' %} {%load static%} {% block content%}
+  <link rel="stylesheet" href="{% static 'aplicatie_exemplu/css/produs.css' %}" />
+
+  <div class="header">
+  {% if categorii %}
+    <h1>
+      {{ categorii.nume }}
+      {% if categorii.icon %}
+        <img src="{{ categorii.icon.url }}" alt="{{ categorii.nume }}" class="icon">
+      {% endif %}
+    </h1>
+    {% else %}
+    <h1>Toate Produsele</h1>
+  {% endif %}
+</div>
+
+  
+  <div class="container_produse">
+
+    {%for produs in pagina.object_list%}
+    <a href="{% url 'detalii_produs' produs.id %}">
+    <div class="produs">
+      <div class="imagine">
+        <img class ='imagine_produs'src="{{produs.poza.url}}" alt="{{ produs.nume }}" />
+      </div>
+      <div class="descriere">
+        <h2>{{produs.nume}}</h2>
+        {%if produs.stoc == 0%}
+        <p class='out_stoc'>Stoc epuizat</p>
+        {%else%}
+        <p class='in_stoc'>In stoc</p>
+        {%endif%}
+        <p class="pret">Pret: {{produs.pret}} RON</p>
+      </div>
+    </div>
+    </a>
+    {%endfor%}
+
+  </div>
+
+  <div class='page_bar'>
+    <p class='pag'>Pagina {{pagina.number}}</p>
+    {%if pagina.has_previous%}
+    <a href='?pagina={{pagina.previous_page_number}}'>
+    <button class='page_button'>
+    &laquo;
+    </button></a>
+    {%else%}
+    <button class='page_button indisp'>&laquo;</button>
+    {%endif%}
+    {%if pagina.has_next%}
+    <a href='?pagina={{pagina.next_page_number}}'><button class='page_button'>
+    &raquo;
+    </button></a>
+    {%else%}
+    <button class='page_button indisp'>&raquo;</button>
+    {%endif%}
+  </div>
+  {%endblock%}

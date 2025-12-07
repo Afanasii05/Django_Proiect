@@ -1,0 +1,116 @@
+:root {
+  --culoare-fundal: #fdfaf7;
+  --culoare-text: #5D5550;
+  --culoare-accent: #D98C5F; 
+  --culoare-verde: #2a7e2a;
+  --culoare-rosu: #c02c2c;
+}
+
+.produs-detaliu-container {
+  display: flex;
+  flex-wrap: wrap; 
+  max-width: 1200px;
+  margin: 3rem auto; 
+  background-color: #fff;
+  border-radius: var(12px);
+  box-shadow: 0 6px 20px rgba(93, 85, 80, 0.1);
+  overflow: hidden;
+}
+
+
+.coloana-imagine {
+  flex: 1 1 45%; 
+  padding: 1.5rem;
+}
+
+.imagine-produs-mare {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1; 
+  object-fit: cover;
+  border-radius: var(12px);
+}
+
+
+.coloana-informatii {
+  flex: 1 1 55%;
+  padding: 2.5rem;
+}
+
+.categorie-breadcrumb {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--culoare-accent);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.coloana-informatii h1 {
+  font-size: 2.8rem;
+  font-weight: 400;
+  color: var(--culoare-text);
+  margin: 0.5rem 0 1rem 0;
+}
+
+.pret-detaliu {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--culoare-accent);
+  margin-bottom: 1.5rem;
+}
+
+.stoc-info .stoc {
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+}
+.stoc.in-stoc {
+  color: var(--culoare-verde);
+  background-color: #e5f9e5;
+}
+.stoc.out-of-stoc {
+  color: var(--culoare-rosu);
+  background-color: #fce7e7;
+}
+
+.descriere-produs {
+  margin: 1.5rem 0;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--culoare-text);
+}
+
+.btn-adauga-cos {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+  background-color: var(--culoare-accent);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-bottom: 2rem;
+}
+
+.btn-adauga-cos:hover {
+  background-color: #c97c50;
+}
+
+.info-livrare {
+  font-size: 0.9rem;
+  color: #777;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 1.5rem;
+}
+
+.info-livrare ul {
+  list-style-type: disc;
+  padding-left: 20px;
+  line-height: 1.6;
+}
+    

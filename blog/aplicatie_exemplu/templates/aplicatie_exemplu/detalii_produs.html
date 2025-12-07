@@ -1,0 +1,49 @@
+{% extends 'aplicatie_exemplu/baza.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'aplicatie_exemplu/css/detalii_produs.css' %}" />
+
+<div class="produs-detaliu-container">
+
+  <div class="coloana-imagine">
+    {% if produs.poza %}
+      <img src="{{ produs.poza.url }}" alt="{{ produs.nume }}" class="imagine-produs-mare">
+    {% else %}
+      <img src="{% static 'imagini/placeholder.png' %}" alt="Fără imagine" class="imagine-produs-mare">
+    {% endif %}
+  </div>
+
+  <div class="coloana-informatii">
+    
+    {% if produs.nume_categorie %}
+      <a href="#" class="categorie-breadcrumb">{{ produs.nume_categorie }}</a>
+      {% endif %}
+
+    <h1>{{ produs.nume }}</h1>
+
+    <p class="pret-detaliu">{{ produs.pret }} RON</p>
+
+    <div class="stoc-info">
+      {% if produs.stoc > 0 %}
+        <span class="stoc in-stoc">În stoc</span>
+      {% else %}
+        <span class="stoc out-of-stoc">Stoc epuizat</span>
+      {% endif %}
+    </div>
+
+    <div class="descriere-produs">
+      <p>{{ produs.descriere }}</p>
+    </div>
+
+    <button class="btn-adauga-cos">Adaugă în coș</button>
+
+    <div class="info-livrare">
+      <p><strong>Livrare:</strong></p>
+      <ul>
+        <li>Cost livrare: 15 RON (gratuit peste 200 RON)</li>
+        <li>Livrare prin Easybox sau curier rapid (2-3 zile lucrătoare)</li>
+      </ul>
+    </div>
+
+  </div> </div> {% endblock %}

@@ -1,5 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from .middleware import LogMiddleware
+from .models import Jucarie, Categorie
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 
 def tabel_procesare(tabel):
     tabel=tabel.split(',')
@@ -49,11 +52,20 @@ def lowest_most_visited(log_list):
     cele_mai_putin_accesate = [url for url in dict_accesari if dict_accesari[url]==mn]
     cele_mai_multe_accesari = [url for url in dict_accesari if dict_accesari[url]==mx]
     return cele_mai_putin_accesate, cele_mai_multe_accesari
+
+def filtrare(parametru,obPagina):
+    
+    if parametru == 'a':
+        lista_sortata = sorted(obPagina.object_list, key=lambda jucarie: jucarie.pret)
+        return lista_sortata
+    if parametru == 'd':
+        lista_sortata = sorted(obPagina.object_list, key=lambda jucarie: jucarie.pret, reverse=True)
+        return lista_sortata
+    return obPagina.object_list
 # Create your views here.
 from django.http import HttpResponse
 def info(request):
     return render(request, 'aplicatie_exemplu/info.html')
-
 def index(request):
     return render(request, 'aplicatie_exemplu/paginaPrincipala.html')
 def in_lucru(request):
@@ -121,3 +133,35 @@ def log(request):
                    'putin_accesate':putin_accesate,'mult_accesate':mult_accesate,'numar_accesari':accesari,'numar_parametrii':informatie_totala['numar_parametrii'],'erori':informatie_totala['erori']}
         return render(request, 'aplicatie_exemplu/paginaLog.html',context)
 
+
+
+def afiare_produse(request,categorie=None):
+    sortare = request.GET.get('sort')
+    categorii=[None]
+    if categorie:
+        lista_jucarii = Jucarie.objects.filter(nume_categorie=categorie)
+        categorii = Categorie.objects.filter(nume=categorie)
+    else:
+        lista_jucarii = Jucarie.objects.all()
+    paginator = Paginator(lista_jucarii,4)
+    nrPagina = request.GET.get('pagina')
+    try:
+        obPagina = paginator.page(nrPagina)
+    except PageNotAnInteger:
+        obPagina=paginator.page(1)
+    except EmptyPage:
+        obPagina =paginator.page(paginator.num_pages)
+    
+    obPagina.object_list = filtrare(sortare,obPagina)
+   
+    return render(request,'aplicatie_exemplu/produs.html',{
+        'pagina':obPagina,
+        'categorii':categorii[0],
+    })
+
+def detalii_produs(request,id_produs):
+    prod = get_object_or_404(Jucarie, id=id_produs)
+
+    return render(request, 'aplicatie_exemplu/detalii_produs.html',{
+        'produs':prod,
+    })
