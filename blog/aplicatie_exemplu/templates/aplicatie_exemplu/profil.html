@@ -1,0 +1,63 @@
+{% extends 'aplicatie_exemplu/baza.html' %} 
+{% load static %} 
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'aplicatie_exemplu/css/inregistrare.css' %}" />
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0" style="border-radius: 15px; overflow: hidden">
+                
+                <div class="card-header bg-primary text-white text-center py-4">
+                    <h3 class="mb-0">Profil Utilizator</h3>
+                    <p class="small mb-0">Datele de mai jos sunt preluate din sesiunea curentă</p>
+                </div>
+
+                <div class="card-body p-4">
+                    <div class="mb-3 border-bottom pb-2">
+                        <label class="text-muted small text-uppercase fw-bold">Nume Complet</label>
+                        <p class="h5">{{ info.nume_complet }}</p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label class="text-muted small text-uppercase fw-bold">Username</label>
+                            <p class="fw-normal">{{ info.username }}</p>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="text-muted small text-uppercase fw-bold">Email</label>
+                            <p class="fw-normal">{{ info.email }}</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label class="text-muted small text-uppercase fw-bold">Telefon</label>
+                            <p class="fw-normal">{{ info.telefon }}</p>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="text-muted small text-uppercase fw-bold">Data Nașterii</label>
+                            <p class="fw-normal">{{ info.data_nasterii }}</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="text-muted small text-uppercase fw-bold">Locație</label>
+                        <p class="fw-normal">{{ info.oras }}, {{ info.tara }}</p>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-light p-4 border-0">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'password_change' %}" class="btn btn-warning fw-bold">
+                            Schimbă Parola
+                        </a>
+                        
+                        <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm">
+                            Deconectare
+                        </a>
+                    </div>
+                </div>
+
+            </div> </div> </div> </div> {% endblock %}

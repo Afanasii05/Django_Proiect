@@ -1,8 +1,34 @@
-from django.shortcuts import get_object_or_404, render
+import datetime
+import os
+import json
+from random import random, sample
+import secrets
+import string
+from django.core.mail import send_mail
+import time
+from django.shortcuts import get_object_or_404, render,redirect
 from .middleware import LogMiddleware
-from .models import Jucarie, Categorie
+from .models import Jucarie, Categorie, UtilizatorPersonalizat
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
+from .forms import AdaugaJucarieForm, ProduseFilterForm, ContactForm, InregistrareForm, FormInregistrareZi
+from .utilFunctions import get_ip,functie_de_data
+from django.contrib.auth import login, logout
+def capitalize_sentences(text):
+    result = ""
+    capitalize_next = True 
+    
+    for i in range(len(text)):
+        char = text[i]
+        if capitalize_next and char.isalpha():
+            result += char.upper()
+            capitalize_next = False
+        else:
+            result += char
+           
+            if char in ".!?":
+                capitalize_next = True
+                
+    return result
 
 def tabel_procesare(tabel):
     tabel=tabel.split(',')
@@ -64,17 +90,94 @@ def filtrare(parametru,obPagina):
     return obPagina.object_list
 # Create your views here.
 from django.http import HttpResponse
-def info(request):
-    return render(request, 'aplicatie_exemplu/info.html')
 def index(request):
-    return render(request, 'aplicatie_exemplu/paginaPrincipala.html')
+    toate_produsele = list(Jucarie.objects.filter(stoc__gt=0).select_related('nume_categorie'))
+    nr_produse = min(6, len(toate_produsele))
+    produse_random = sample(toate_produsele, nr_produse) if toate_produsele else []
+    categorii = Categorie.objects.all()[:4]
+    return render(request, 'aplicatie_exemplu/paginaPrincipala.html', {
+        'produse_recomandate': produse_random,
+        'categorii_afisate': categorii,
+    })
 def in_lucru(request):
     return render(request, 'aplicatie_exemplu/in_lucru.html')
 def despre(request):
     return render(request, 'aplicatie_exemplu/despre.html')
 
+def contact(request):
+   
+    form = ContactForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            data = form.cleaned_data
+            mesaj = data['mesaj']
+            data_nasterii = data['data_nasterii']
+            tip = data['tip_mesaj']
+            zile = data['minim_zile_asteptare']
+            
+            today = datetime.date.today()
+            ani = today.year - data_nasterii.year
+            luni = today.month - data_nasterii.month
+            if today.day < data_nasterii.day:
+                luni -= 1
+            if luni < 0:
+                ani -= 1
+                luni += 12
+            varsta_formatata = f"{ani} ani și {luni} luni"
+            toSpl=string.punctuation
+            for p in toSpl:
+                mesaj = mesaj.replace(p, ' ')
+            mesaj = mesaj.replace('\n', ' ')
+            mesaj = " ".join(mesaj.split())
+            mesaj = capitalize_sentences(mesaj)
+            
+            urgent = False
+            if (tip in ['review', 'cerere'] and zile == 2) or (tip in ['intrebare','reclamatie','programare'] and zile == 4):
+                urgent = True
+            data['urgent'] = urgent
+            timestamp = int(time.time())
+            nume_fisier = f"mesaj_{timestamp}[{'urgent_' if urgent else ''}]    {data['nume']}.txt"
+            date_de_salvat = data.copy()
+            date_de_salvat.pop('confirm_email', None)
+            date_de_salvat.update({
+                'mesaj': mesaj,
+                'varsta': varsta_formatata,
+                'urgent': urgent,
+                'ip': get_ip(request),
+                'data_trimiterii': functie_de_data(),
+            })
+            date_de_salvat['data_nasterii'] = str(data['data_nasterii'])
+            cale_folder = os.path.join(os.path.dirname(__file__), 'Mesaje')
+            if not os.path.exists(cale_folder):
+                os.makedirs(cale_folder)
+            cale_completa = os.path.join(cale_folder, nume_fisier)
+            with open(cale_completa, 'w', encoding='utf-8') as fisier_json:
+                json.dump(date_de_salvat, fisier_json, indent=4, ensure_ascii=False)
+            
+            return render(request, 'aplicatie_exemplu/paginaPrincipala.html', {
+                'nume': form.cleaned_data['nume'],
+                'prenume': form.cleaned_data['prenume']
+            })
 
+    else:
+        form = ContactForm()
+    return render(request, 'aplicatie_exemplu/contact.html', {'form': form})
 
+def adauga_produs(request):
+    form= AdaugaJucarieForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            jucarie_noua = form.save(commit=False)
+            cost_crosetare = form.cleaned_data['pret_achizitie']
+            adaos = form.cleaned_data['procent_adaugare']
+            jucarie_noua.pret = cost_crosetare + (cost_crosetare * adaos)
+            jucarie_noua.save()
+            return render(request,'aplicatie_exemplu/adauga_jucarie.html', {'form': AdaugaJucarieForm()})
+    else:
+        form = AdaugaJucarieForm()
+    return render(request,'aplicatie_exemplu/adauga_jucarie.html',{'form': form})
+    
+    
 def log(request):
     
     ultimele = request.GET.get('ultimele',None)
@@ -128,22 +231,54 @@ def log(request):
                    'putin_accesate':putin_accesate,'mult_accesate':mult_accesate,'erori':informatie_totala['erori']}
         return render(request,'aplicatie_exemplu/tabelLog.html',context)
     else:
-        print(informatie_totala['detalii_accesari'])
         context = {'detalii_accesari': informatie_totala['detalii_accesari'],
                    'putin_accesate':putin_accesate,'mult_accesate':mult_accesate,'numar_accesari':accesari,'numar_parametrii':informatie_totala['numar_parametrii'],'erori':informatie_totala['erori']}
         return render(request, 'aplicatie_exemplu/paginaLog.html',context)
 
 
 
-def afiare_produse(request,categorie=None):
-    sortare = request.GET.get('sort')
-    categorii=[None]
+def afiare_produse(request):
+    
+    form = ProduseFilterForm(request.GET)
+    date= form.cleaned_data if form.is_valid() else {}
+    mesaj_eroare = None
+    mesaj_paginare=None
+    elem_pe_pagina = 4
+    categorie = request.GET.get('categorie',None)
+    sortare = date.get('pret_sortare')
+    
     if categorie:
         lista_jucarii = Jucarie.objects.filter(nume_categorie=categorie)
-        categorii = Categorie.objects.filter(nume=categorie)
     else:
         lista_jucarii = Jucarie.objects.all()
-    paginator = Paginator(lista_jucarii,4)
+        
+    if date.get('nume'):
+            lista_jucarii = lista_jucarii.filter(nume__icontains=date['nume'])
+    if date.get('nume_categorie'):
+            lista_jucarii = lista_jucarii.filter(nume_categorie=date['nume_categorie'])        
+    if date.get('marime'):
+            lista_jucarii   = lista_jucarii.filter(marime=date['marime'])
+    if date.get('stoc'):
+            lista_jucarii = lista_jucarii.filter(stoc__gt=0)
+    if date.get('pret_min') is not None:
+            lista_jucarii = lista_jucarii.filter(pret__gte=date['pret_min'])
+    if date.get('pret_max') is not None:
+            lista_jucarii = lista_jucarii.filter(pret__lte=date['pret_max'])
+   
+
+    
+    if date.get('paginare'):
+        elem_pe_pagina = date['paginare']
+    if elem_pe_pagina > len(lista_jucarii):
+        mesaj_paginare = f"Exista doar {len(lista_jucarii)} produse care corespund criteriilor de filtrare, deci nu se poate afisa {elem_pe_pagina} produse pe pagina."
+        elem_pe_pagina = len(lista_jucarii) 
+    if len(lista_jucarii)==0:
+        return render(request,'aplicatie_exemplu/produs.html',{
+            'form':form,
+            'mesaj_eroare':"Nu s-au gasit produse care sa corespunda criteriilor de filtrare",
+        })
+    paginator = Paginator(lista_jucarii,elem_pe_pagina)
+    
     nrPagina = request.GET.get('pagina')
     try:
         obPagina = paginator.page(nrPagina)
@@ -153,10 +288,12 @@ def afiare_produse(request,categorie=None):
         obPagina =paginator.page(paginator.num_pages)
     
     obPagina.object_list = filtrare(sortare,obPagina)
-   
+    if(len(lista_jucarii)==0):
+        mesaj_eroare="Nu s-au gasit produse care sa corespunda criteriilor de filtrare"
     return render(request,'aplicatie_exemplu/produs.html',{
+        'form':form,
         'pagina':obPagina,
-        'categorii':categorii[0],
+        'mesaj_eroare':mesaj_eroare,
     })
 
 def detalii_produs(request,id_produs):
@@ -165,3 +302,92 @@ def detalii_produs(request,id_produs):
     return render(request, 'aplicatie_exemplu/detalii_produs.html',{
         'produs':prod,
     })
+    
+    
+def inregistrare_utilizator(request):
+    if request.method == 'POST':
+        form = InregistrareForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            cod_random = secrets.token_urlsafe(16)
+            user.cod = cod_random 
+            user.save()
+            link_confirmare = f"http://127.0.0.1:8000/email_confirmare/{cod_random}/"
+            send_mail(
+                subject='Confirmare înregistrare',
+                message=f'Bun venit, {user.first_name}! Pentru a-ti confirma inregistrarea, te rugam sa accesezi urmatorul link: {link_confirmare}',
+                from_email='admin@exemplu.ro',
+                recipient_list=[user.email],
+                )
+            
+            return redirect('login')
+    else:
+        form = InregistrareForm()
+    
+    return render(request, 'aplicatie_exemplu/inregistrare.html', {'form': form})
+
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')
+
+def login_view(request):
+    if request.method == 'POST':
+        form = FormInregistrareZi(request, data=request.POST)
+        if form.is_valid():   
+            user = form.get_user()
+            actual_rn = request.user
+            if actual_rn.email_confirmat == False:
+                return HttpResponse("Ne pare rau, nu ti-ai confirmat emailul")
+          
+            login(request, user)
+            if form.cleaned_data.get('remember_me'):
+                request.session.set_expiry(86400)
+            else:
+                request.session.set_expiry(0)
+            return redirect('profil')
+    else:
+        form = FormInregistrareZi()
+    return render(request, 'aplicatie_exemplu/login.html', {'form': form})
+
+def profil_view(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    
+    info = request.session.get('date_utilizator')
+    if not info:
+        user = request.user
+        info = {
+            'username': user.username,
+            'email': user.email,
+            'nume_complet': f"{user.first_name} {user.last_name}",
+            'telefon': getattr(user, 'telefon', 'Nespecificat'),
+            'oras': getattr(user, 'oras', 'Nespecificat'),
+            'tara': getattr(user, 'tara', 'Nespecificat'),
+            'data_nasterii': str(getattr(user, 'data_nasterii', 'Nespecificat')),
+        }
+        request.session['date_utilizator'] = info
+        request.session.modified = True 
+
+    return render(request, 'aplicatie_exemplu/profil.html', {'info': info})
+
+def email_confirmare(request, cod):
+    users = UtilizatorPersonalizat.objects.filter(cod=cod)
+    print(f"--- DEBUG: Codul primit din URL este: {cod} ---")
+    toti_userii = UtilizatorPersonalizat.objects.all()
+    for u in toti_userii:
+        print(f"User: {u.username} | Cod în DB: {u.cod}")
+        
+    if users.exists():
+        user = users.first()
+        user.email_confirmat = True
+        user.save()
+        return render(request, 'aplicatie_exemplu/email_confirmare.html', {'prenume': user.first_name, 'nume': user.last_name})
+    else:
+        return HttpResponse("Cod de confirmare invalid.")
+
+def cart_view(request):
+    """View for displaying the shopping cart page"""
+    return render(request, 'aplicatie_exemplu/cart.html')
+    

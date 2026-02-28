@@ -1,0 +1,127 @@
+/* adauga_jucarie.css */
+
+:root {
+    --primary-color: #4a90e2;
+    --secondary-color: #f39c12;
+    --bg-color: #f8f9fa;
+    --text-color: #333;
+    --border-radius: 12px;
+}
+
+body {
+    background-color: var(--bg-color);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+    max-width: 900px;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    margin-top: 60px;
+    margin-bottom: 60px;
+}
+
+h2 {
+    color: var(--primary-color);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: var(--secondary-color);
+    margin: 10px auto;
+    border-radius: 2px;
+}
+
+/* Stiluri pentru Label-uri */
+label {
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* Stiluri pentru Input-uri, Select-uri și Textarea */
+input.form-control, 
+select.form-select, 
+textarea.form-control {
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 12px 15px;
+    transition: all 0.3s ease;
+    background-color: #fff;
+}
+
+input.form-control:focus, 
+select.form-select:focus, 
+textarea.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.15);
+    outline: none;
+}
+
+/* Stil special pentru campul de fisiere (poza) */
+input[type="file"] {
+    background: #f1f3f5;
+    padding: 10px;
+}
+
+/* Butonul de trimitere */
+.btn-primary {
+    background-color: var(--primary-color);
+    border: none;
+    padding: 14px 40px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.btn-primary:hover {
+    background-color: #357abd;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+/* Erori */
+.text-danger {
+    font-size: 0.85rem;
+    margin-top: 5px;
+    font-weight: 500;
+}
+
+.alert-danger {
+    border-radius: var(--border-radius);
+    border: none;
+    background-color: #fff5f5;
+    color: #e53e3e;
+    padding: 15px;
+    margin-bottom: 25px;
+}
+
+/* Animatie la incarcare */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.container {
+    animation: fadeIn 0.6s ease-out;
+}

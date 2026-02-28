@@ -1,0 +1,13 @@
+{
+    "nume": "Vintage Lupitadool",
+    "prenume": "Mun",
+    "CNP": "1121212214321",
+    "data_nasterii": "2000-02-21",
+    "email": "fanelmunteanu568@gmail.com",
+    "tip_mesaj": "intrebare",
+    "subiect": "Munt",
+    "minim_zile_asteptare": 4,
+    "mesaj": "Munt unt unt unt unt unt Vintage",
+    "urgent": false,
+    "varsta": "25 ani și 11 luni"
+}

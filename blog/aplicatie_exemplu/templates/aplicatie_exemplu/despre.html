@@ -1,18 +1,76 @@
-{% extends 'aplicatie_exemplu/baza.html' %} {% block content %} {%load static%}
+{% extends 'aplicatie_exemplu/baza.html' %}
+{% load static %}
+{% block title %}Despre Noi - Amigurumi World{% endblock %}
+{% block content %}
 <link rel="stylesheet" href="{% static 'aplicatie_exemplu/css/despre.css' %}" />
-<h1>Despre:</h1>
-<p>
-  Amigurumi este arta japoneză de a croșeta (sau, mai rar, tricota) mici
-  creaturi sau obiecte. Caracteristica definitorie este stilul "kawaii"
-  (drăguț), obținut adesea prin capete mari și corpuri mici. Părțile sunt
-  lucrate în spirală, umplute cu vatelina și apoi cusute împreună pentru a forma
-  animale, personaje sau chiar alimente cu fețe zâmbitoare.
-</p>
-<div class="container1">
-  <img
-    src="{% static 'aplicatie_exemplu/images/amigurumi_12.jpg' %}"
-    alt="Amigurumi Toy 2"
-  />
-  <div class="gallery-item-title">Creator: Nicoleta</div>
-</div>
+
+<section class="despre-hero">
+  <div class="despre-container">
+    <span class="despre-tag">✨ Povestea Noastră</span>
+    <h1>Despre <span class="gradient-text">Amigurumi World</span></h1>
+    <p class="despre-intro">
+      Cu fiecare croseta, creăm povești. Cu fiecare nod, punem suflet.
+    </p>
+  </div>
+</section>
+
+<section class="despre-content">
+  <div class="despre-container">
+    <div class="despre-grid">
+      <div class="despre-text">
+        <h2>Ce este Amigurumi?</h2>
+        <p>
+          Amigurumi este arta japoneză de a croșeta (sau, mai rar, tricota) mici
+          creaturi sau obiecte. Caracteristica definitorie este stilul "kawaii"
+          (drăguț), obținut adesea prin capete mari și corpuri mici.
+        </p>
+        <p>
+          Părțile sunt lucrate în spirală, umplute cu vatelină și apoi cusute
+          împreună pentru a forma animale, personaje sau chiar alimente cu fețe
+          zâmbitoare.
+        </p>
+        <div class="despre-highlights">
+          <div class="highlight-item">
+            <span class="highlight-icon">🧶</span>
+            <div>
+              <strong>Materiale Premium</strong>
+              <p>Fire de bumbac organic, umplutură hipoalergenică</p>
+            </div>
+          </div>
+          <div class="highlight-item">
+            <span class="highlight-icon">✂️</span>
+            <div>
+              <strong>Lucrate Manual</strong>
+              <p>Fiecare piesă este unică, croșetată cu atenție la detalii</p>
+            </div>
+          </div>
+          <div class="highlight-item">
+            <span class="highlight-icon">💝</span>
+            <div>
+              <strong>Făcute cu Drag</strong>
+              <p>Pasiune și dedicare în fiecare jucărie creată</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="despre-image">
+        <img src="{% static 'aplicatie_exemplu/images/amigurumi_12.jpg' %}" alt="Creator Amigurumi" />
+        <div class="creator-tag">
+          <span>👩‍🎨</span> Creator: <strong>Nicoleta</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="despre-cta">
+  <div class="despre-container">
+    <h3>Descoperă colecția noastră</h3>
+    <p>Fiecare jucărie are propria personalitate și așteaptă să fie iubită.</p>
+    <a href="{% url 'produs' %}" class="btn-cta">
+      Vezi Produsele <span>→</span>
+    </a>
+  </div>
+</section>
+
 {% endblock %}

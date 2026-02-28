@@ -1,38 +1,216 @@
 {% extends 'aplicatie_exemplu/baza.html' %}
-
 {% load static %}
-
 {% block title %}Acasă - Amigurumi World{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'aplicatie_exemplu/css/homepage.css' %}" />
 
-    <section class="hero">
-        <div class="container">
-            <h2>Made with Love & Yarn</h2>
-            <p>Welcome to a magical world of handmade crochet toys. Each one has a unique personality and is waiting to be loved.</p>
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-bg-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+    <div class="hero-content">
+        <span class="hero-badge">✨ Handmade with Love</span>
+        <h2 class="hero-title">
+            Descoperă Lumea <br />
+            <span class="gradient-text">Amigurumi</span>
+        </h2>
+        <p class="hero-description">
+            Fiecare jucărie este croșetată manual cu drag și atenție la detalii.
+            Personaje unice care așteaptă să fie iubite.
+        </p>
+        <div class="hero-buttons">
+            <a href="{% url 'produs' %}" class="btn-hero-primary">
+                Vezi Produsele
+                <span class="btn-arrow">→</span>
+            </a>
+            <a href="{% url 'despre' %}" class="btn-hero-secondary">
+                Despre Noi
+            </a>
         </div>
-    </section>
-
-    <section class="gallery-container">
-        <div class="container">
-            <h3>Our Little Friends</h3>
-            <div class="gallery-grid">
-                
-                <div class="gallery-item">
-                    <img src="{% static 'aplicatie_exemplu/images/amigurumi_1.jpg' %}" alt="Amigurumi Toy 1">
-                    <div class="gallery-item-title">Cute Bear</div>
-                </div>
-                <div class="gallery-item">
-                    <img src="{% static 'aplicatie_exemplu/images/amigurumi_2.jpg' %}" alt="Amigurumi Toy 2">
-                    <div class="gallery-item-title">Sleepy Fox</div>
-                </div>
-                <div class="gallery-item">
-                    <img src="{% static 'aplicatie_exemplu/images/amigurumi_9.jpg' %}" alt="Amigurumi Toy 9">
-                    <div class="gallery-item-title">Giraffe</div>
-                </div>
-
+        <div class="hero-stats">
+            <div class="stat-item">
+                <span class="stat-number" data-count="100">0</span>
+                <span class="stat-label">Jucării Create</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" data-count="50">0</span>
+                <span class="stat-label">Clienți Fericiți</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" data-count="5">0</span>
+                <span class="stat-label">Ani Experiență</span>
             </div>
         </div>
-    </section>
+    </div>
+    <div class="hero-image-side">
+        <div class="hero-image-wrapper">
+            <img src="{% static 'aplicatie_exemplu/images/amigurumi_1.jpg' %}" alt="Amigurumi" class="hero-main-img" />
+            <div class="floating-card card-1">
+                <span>🧶</span> 100% Handmade
+            </div>
+            <div class="floating-card card-2">
+                <span>🎁</span> Cadouri Perfecte
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+{% if categorii_afisate %}
+<section class="categories-section">
+    <div class="section-container">
+        <div class="section-header">
+            <span class="section-tag">Categorii</span>
+            <h3>Explorează după Categorie</h3>
+        </div>
+        <div class="categories-grid">
+            {% for cat in categorii_afisate %}
+            <a href="{% url 'produs' %}?categorie={{ cat.nume }}" class="category-card"
+                style="animation-delay: {{ forloop.counter0 }}00ms">
+                <div class="category-icon-wrapper">
+                    {% if cat.icon %}
+                    <img src="{{ cat.icon.url }}" alt="{{ cat.nume }}" class="category-icon" />
+                    {% else %}
+                    <span class="category-emoji">🧸</span>
+                    {% endif %}
+                </div>
+                <span class="category-name">{{ cat.nume }}</span>
+                <span class="category-arrow">→</span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Featured Products Section -->
+{% if produse_recomandate %}
+<section class="products-section">
+    <div class="section-container">
+        <div class="section-header">
+            <span class="section-tag">Recomandate</span>
+            <h3>Produse Alese pentru Tine</h3>
+            <p class="section-subtitle">O selecție random din colecția noastră — refresh pentru surprize noi!</p>
+        </div>
+        <div class="products-grid">
+            {% for produs in produse_recomandate %}
+            <a href="{% url 'detalii_produs' produs.id %}" class="product-card"
+                style="animation-delay: {{ forloop.counter0 }}50ms">
+                <div class="product-card-image">
+                    {% if produs.poza %}
+                    <img src="{{ produs.poza.url }}" alt="{{ produs.nume }}" />
+                    {% else %}
+                    <img src="{% static 'aplicatie_exemplu/images/doll.png' %}" alt="{{ produs.nume }}" />
+                    {% endif %}
+                    {% if produs.stoc > 0 %}
+                    <span class="product-badge in-stock">În stoc</span>
+                    {% else %}
+                    <span class="product-badge out-stock">Epuizat</span>
+                    {% endif %}
+                </div>
+                <div class="product-card-info">
+                    <h4>{{ produs.nume }}</h4>
+                    {% if produs.nume_categorie %}
+                    <span class="product-category">{{ produs.nume_categorie }}</span>
+                    {% endif %}
+                    <div class="product-card-footer">
+                        <span class="product-card-price">{{ produs.pret }} RON</span>
+                        {% if produs.stoc > 0 %}
+                        <button class="quick-add-btn" data-add-to-cart data-id="{{ produs.id }}"
+                            data-nume="{{ produs.nume|escapejs }}" data-pret="{{ produs.pret }}"
+                            data-poza="{% if produs.poza %}{{ produs.poza.url }}{% endif %}"
+                            onclick="event.preventDefault(); event.stopPropagation();">
+                            + Coș
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        <div class="see-all-products">
+            <a href="{% url 'produs' %}" class="btn-see-all">
+                Vezi Toate Produsele
+                <span class="btn-arrow">→</span>
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Features Section -->
+<section class="features-section">
+    <div class="section-container">
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🧶</div>
+                <h4>100% Handmade</h4>
+                <p>Fiecare produs este croșetat manual cu materiale de calitate superioară.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📦</div>
+                <h4>Livrare Rapidă</h4>
+                <p>Livrăm în 2-3 zile lucrătoare. Gratuit pentru comenzi peste 200 RON.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💝</div>
+                <h4>Cadou Perfect</h4>
+                <p>Ambalaj cadou disponibil. Ideal pentru cei dragi, la orice ocazie.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌿</div>
+                <h4>Materiale Eco</h4>
+                <p>Folosim fire de bumbac organic și umplutură hipoalergenică.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Counter animation script -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Animate counters when visible
+        const counters = document.querySelectorAll('[data-count]');
+        const speed = 60;
+
+        const animateCounter = function (counter) {
+            const target = parseInt(counter.getAttribute('data-count'));
+            const increment = Math.max(1, Math.floor(target / speed));
+            let current = 0;
+
+            const updateCounter = function () {
+                current += increment;
+                if (current >= target) {
+                    counter.textContent = target + '+';
+                    return;
+                }
+                counter.textContent = current;
+                requestAnimationFrame(updateCounter);
+            };
+            updateCounter();
+        };
+
+        // Intersection Observer for scroll animations
+        const observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                    // Animate counters
+                    var counterElements = entry.target.querySelectorAll('[data-count]');
+                    counterElements.forEach(function (c) { animateCounter(c); });
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.hero-stats, .product-card, .category-card, .feature-card').forEach(function (el) {
+            observer.observe(el);
+        });
+    });
+</script>
 
 {% endblock %}

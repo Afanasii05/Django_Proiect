@@ -1,24 +1,22 @@
 {% extends 'aplicatie_exemplu/baza.html' %}
 {% load static %}
-
+{% block title %}{{ produs.nume }} - Amigurumi World{% endblock %}
 {% block content %}
 <link rel="stylesheet" href="{% static 'aplicatie_exemplu/css/detalii_produs.css' %}" />
 
 <div class="produs-detaliu-container">
-
   <div class="coloana-imagine">
     {% if produs.poza %}
-      <img src="{{ produs.poza.url }}" alt="{{ produs.nume }}" class="imagine-produs-mare">
+    <img src="{{ produs.poza.url }}" alt="{{ produs.nume }}" class="imagine-produs-mare" />
     {% else %}
-      <img src="{% static 'imagini/placeholder.png' %}" alt="Fără imagine" class="imagine-produs-mare">
+    <img src="{% static 'aplicatie_exemplu/images/doll.png' %}" alt="Fără imagine" class="imagine-produs-mare" />
     {% endif %}
   </div>
 
   <div class="coloana-informatii">
-    
     {% if produs.nume_categorie %}
-      <a href="#" class="categorie-breadcrumb">{{ produs.nume_categorie }}</a>
-      {% endif %}
+    <a href="{% url 'produs' %}?categorie={{ produs.nume_categorie }}" class="categorie-breadcrumb">{{produs.nume_categorie }}</a>
+    {% endif %}
 
     <h1>{{ produs.nume }}</h1>
 
@@ -26,9 +24,9 @@
 
     <div class="stoc-info">
       {% if produs.stoc > 0 %}
-        <span class="stoc in-stoc">În stoc</span>
+      <span class="stoc in-stoc">În stoc ({{ produs.stoc }} disponibile)</span>
       {% else %}
-        <span class="stoc out-of-stoc">Stoc epuizat</span>
+      <span class="stoc out-of-stoc">Stoc epuizat</span>
       {% endif %}
     </div>
 
@@ -36,7 +34,20 @@
       <p>{{ produs.descriere }}</p>
     </div>
 
-    <button class="btn-adauga-cos">Adaugă în coș</button>
+    {% if produs.stoc > 0 %}
+    <div class="cantitate-selector">
+      <label for="qty-input">Cantitate:</label>
+      <div class="qty-controls">
+        <button type="button" class="qty-ctrl-btn" id="qty-minus">−</button>
+        <input type="number" id="qty-input" value="1" min="1" max="{{ produs.stoc }}" readonly />
+        <button type="button" class="qty-ctrl-btn" id="qty-plus">+</button>
+      </div>
+    </div>
+    <button class="btn-adauga-cos" data-add-to-cart data-id="{{ produs.id }}" data-nume="{{ produs.nume|escapejs }}"
+      data-pret="{{ produs.pret }}" data-poza="{% if produs.poza %}{{ produs.poza.url }}{% endif %}">
+      Adaugă în coș
+    </button>
+    {% endif %}
 
     <div class="info-livrare">
       <p><strong>Livrare:</strong></p>
@@ -45,5 +56,28 @@
         <li>Livrare prin Easybox sau curier rapid (2-3 zile lucrătoare)</li>
       </ul>
     </div>
+  </div>
+</div>
 
-  </div> </div> {% endblock %}
+<script>
+  // Quantity selector logic for detail page
+  document.addEventListener('DOMContentLoaded', function () {
+    const qtyInput = document.getElementById('qty-input');
+    const minusBtn = document.getElementById('qty-minus');
+    const plusBtn = document.getElementById('qty-plus');
+    if (!qtyInput || !minusBtn || !plusBtn) return;
+
+    const maxQty = parseInt(qtyInput.getAttribute('max')) || 99;
+
+    minusBtn.addEventListener('click', function () {
+      let val = parseInt(qtyInput.value) || 1;
+      if (val > 1) { qtyInput.value = val - 1; }
+    });
+
+    plusBtn.addEventListener('click', function () {
+      let val = parseInt(qtyInput.value) || 1;
+      if (val < maxQty) { qtyInput.value = val + 1; }
+    });
+  });
+</script>
+{% endblock %}

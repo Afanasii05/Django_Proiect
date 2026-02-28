@@ -1,0 +1,13 @@
+{
+    "nume": "Munteanu Nicoleta",
+    "prenume": "Mun",
+    "CNP": "1121212214321",
+    "data_nasterii": "2000-12-12",
+    "email": "fanelmunteanu568@gmail.com",
+    "tip_mesaj": "intrebare",
+    "subiect": "UnCeva",
+    "minim_zile_asteptare": 4,
+    "mesaj": "FF FF FF FF FF FF Nicoleta",
+    "urgent": false,
+    "varsta": "25 ani și 2 luni"
+}

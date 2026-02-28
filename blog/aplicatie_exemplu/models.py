@@ -1,8 +1,10 @@
 import uuid
+from django.conf import settings
 from django.db import models
+
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.forms import ValidationError
-
+from django.contrib.auth.models import AbstractUser
 
 def validate_telefon(numar):
     if not numar.isdigit() or len(numar) < 7 or len(numar) > 15:
@@ -81,3 +83,57 @@ class EvenimentPromotional(models.Model):
             )
     def __str__(self):
         return self.nume
+    
+    
+class Voucher(models.Model):
+    cod_voucher = models.CharField(max_length=20, unique=True)
+    valoare_reducere = models.DecimalField(max_digits=5, decimal_places=2)
+    data_expirare = models.DateField()
+    este_activ = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.cod_voucher
+
+class Comanda(models.Model):
+    STATUS_CHOICES = [
+        ('P', 'In Procesare'),
+        ('E', 'Expediata'),
+        ('L', 'Livrata'),
+        ('A', 'Anulata'),
+    ]
+    utilizator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    produse = models.ManyToManyField('Jucarie', through='DetaliiComanda')
+    data_plasare = models.DateTimeField(auto_now_add=True)
+    status_comanda = models.CharField(max_length=1, choices=STATUS_CHOICES, default='P')
+    total_plata = models.DecimalField(max_digits=10, decimal_places=2)
+    metoda_plata = models.CharField(max_length=50, default='Card')
+    def __str__(self):
+        return f"Comanda #{self.id} - {self.utilizator.username}"
+
+class DetaliiComanda(models.Model):
+    comanda = models.ForeignKey(Comanda, on_delete=models.CASCADE)
+    jucarie = models.ForeignKey('Jucarie', on_delete=models.CASCADE)
+    cantitate = models.PositiveIntegerField(default=1)
+
+
+class Review(models.Model):
+    utilizator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    jucarie = models.ForeignKey('Jucarie', on_delete=models.CASCADE, related_name='reviews')
+    text_comentariu = models.TextField()
+    punctaj_rating = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
+    data_publicare = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f"Review {self.utilizator.username} - {self.jucarie.nume}"
+    
+class UtilizatorPersonalizat(AbstractUser):
+    telefon = models.CharField(max_length=15,null=True, blank=True)
+    tara = models.CharField(max_length=50,null=True, blank=True)
+    oras = models.CharField(max_length=50,null=True, blank=True)
+    prenume = models.CharField(max_length=30,null=True, blank=True)
+    data_nasterii = models.DateField(null=True, blank=True)
+    cod = models.CharField(max_length=100, blank=True)
+    email_confirmat = models.BooleanField(default=False)
+    def __str__(self):
+        return self.username

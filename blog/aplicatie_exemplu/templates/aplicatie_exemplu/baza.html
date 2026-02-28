@@ -1,55 +1,54 @@
 {% load static %}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ro">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>{% block title %}Amigurumi World{% endblock %}</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link
-      rel="stylesheet"
-      href="{% static 'aplicatie_exemplu/css/style.css' %}"
-    />
-  </head>
-  <body>
-    <header>
-      <div class="container">
-        <h1>Amigurumi World</h1>
-        <nav class="nav">
-          <a href="{% url 'index' %}">Acasa</a>
-          <a href="{% url 'info' %}">Info</a>
-          <a href="{% url 'contact' %}">Contact</a>
-          <a href="{% url 'despre' %}">Despre</a>
-          <div class="dropdown">
-            <a href="{% url 'produs' %}"
-              ><button class="dropbtn">Produse</button></a
-            >
-            <div class="dropdown-content">
-              {% for cat in categorii_meniu %}
-              <a href="{% url 'produs_categorie' cat.nume %}">
-                {{ cat.nume }}
-                <img
-                  src="{{cat.icon.url}}"
-                  
-                  alt="{{cat.nume}}"
-                  class="icon"
-                />
-              </a>
-              {% endfor %}
-            </div>
+  <title>{% block title %}Amigurumi World{% endblock %}</title>
+
+  <link rel="stylesheet" href="{% static 'aplicatie_exemplu/css/style.css' %}" />
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <h1>Amigurumi World</h1>
+      <nav class="nav">
+        <a href="{% url 'index' %}">Acasa</a>
+        <a href="{% url 'contact' %}">Contact</a>
+        <a href="{% url 'despre' %}">Despre</a>
+        <div class="dropdown">
+          <a href="{% url 'produs' %}"><button class="dropbtn">Produse</button></a>
+          <div class="dropdown-content">
+            {% for cat in categorii_meniu %}
+            <a href="{% url 'produs' %}?categorie={{ cat.nume }}">
+              {{ cat.nume }}
+              <img src="{{cat.icon.url}}" alt="{{cat.nume}}" class="icon" />
+            </a>
+            {% endfor %}
           </div>
-          <a href="{% url 'cos_virtual' %}">Cosul Tau</a>
-        </nav>
-      </div>
-    </header>
+        </div>
+        <a href="{% url 'cart' %}" class="cart-link">
+          Cosul Tau
+          <span id="cart-badge" class="cart-badge">0</span>
+        </a>
+      </nav>
+    </div>
+  </header>
 
-    <main>{% block content %} {% endblock %}</main>
+  <main>{% block content %} {% endblock %}</main>
 
-    <footer>
-      <div class="container">
-        <p>&copy; 2025 Amigurumi World. All rights reserved.</p>
-      </div>
-    </footer>
-  </body>
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Amigurumi World. All rights reserved.</p>
+      <p>{{ip_client}}</p>
+    </div>
+  </footer>
+
+  <!-- Cart JavaScript -->
+  <script src="{% static 'aplicatie_exemplu/js/cart.js' %}"></script>
+</body>
+
 </html>

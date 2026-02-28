@@ -1,0 +1,35 @@
+
+{%extends 'aplicatie_exemplu/baza.html'%}
+{% load static %} 
+{%block content%}
+{% load static %}
+<html>
+<head>
+    <title>Confirmare Inregistrare</title>
+    <style>
+        .logo-img {
+            max-width: 150px;
+            display: block;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="text-align: center; font-family: sans-serif;">
+        
+        <img src="{% static 'aplicatie_exemplu/images/amigurumi icon.jpg' %}" alt="Amigurumi Icon" class="logo-img">
+
+        <h2>Bun venit în comunitatea noastra, {{ prenume }}!</h2>
+        
+        <p>Salut, <strong>{{ prenume }} {{ nume }}</strong>,</p>
+        
+        <p>Ne bucurăm că te-ai înregistrat pe site-ul nostru. Contul tău a fost creat cu succes!</p>
+        
+        <p><strong>Detalii cont:</strong><br>
+           Utilizator: <code>{{ username }}</code></p>
+        
+        <p>Poți închide această pagină cu succes acum.</p>
+    </div>
+</body>
+</html>
+{%endblock%}

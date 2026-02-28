@@ -1,59 +1,131 @@
-  {% extends 'aplicatie_exemplu/baza.html' %} {%load static%} {% block content%}
-  <link rel="stylesheet" href="{% static 'aplicatie_exemplu/css/produs.css' %}" />
+{% extends 'aplicatie_exemplu/baza.html' %} {%load static%} {% block content%}
+<link rel="stylesheet" href="{% static 'aplicatie_exemplu/css/produs.css' %}" />
+<div class="container-filtre">
+  <details>
+    <summary>
+      <span class="titlu-filtre">Filtre Produse</span>
+      <span class="icon-sageti">▼</span>
+    </summary>
 
-  <div class="header">
-  {% if categorii %}
-    <h1>
-      {{ categorii.nume }}
-      {% if categorii.icon %}
-        <img src="{{ categorii.icon.url }}" alt="{{ categorii.nume }}" class="icon">
-      {% endif %}
-    </h1>
-    {% else %}
-    <h1>Toate Produsele</h1>
-  {% endif %}
+    <div class="continut-filtre">
+      <button type="button" onclick="resetFiltre()" class="btn btn-secondary">
+        Reseteaza Filtrele
+      </button>
+
+      <form method="get" action="{% url 'produs' %}">
+        <div class="row">
+          <div class="col-md-3">{{ form.nume.label_tag }} {{ form.nume }}</div>
+          <div class="col-md-3">
+            {{ form.nume_categorie.label_tag }} {{ form.nume_categorie }}
+          </div>
+          <div class="col-md-3">
+            {{ form.pret_min.label_tag }} {{ form.pret_min }}
+          </div>
+          <div class="col-md-3">
+            {{ form.pret_max.label_tag }} {{ form.pret_max }}
+          </div>
+        </div>
+
+        <div class="row" style="margin-top: 10px">
+          <div class="col-md-3">
+            {{ form.pret_sortare.label_tag }} {{ form.pret_sortare }}
+          </div>
+          <div class="col-md-3">
+            {{ form.marime.label_tag }} {{ form.marime }}
+          </div>
+          <div class="col-md-3">{{ form.stoc.label_tag }} {{ form.stoc }}</div>
+        </div>
+
+        <div class="row" style="margin-top: 10px">
+          <div class="col-md-4">
+            {{ form.paginare.label_tag }} {{ form.paginare }}
+          </div>
+          <div class="col-md-4">
+            <button type="submit" class="btn btn-primary">
+              Aplica Filtrele
+            </button>
+          </div>
+        </div>
+
+        {% if form.errors %}
+        <div class="alert alert-danger">{{ form.errors }}</div>
+        {% endif %}
+      </form>
+    </div>
+  </details>
 </div>
 
-  
-  <div class="container_produse">
-
-    {%for produs in pagina.object_list%}
+<div class="container_produse">
+  {%for produs in pagina.object_list%}
+  <div class="produs">
     <a href="{% url 'detalii_produs' produs.id %}">
-    <div class="produs">
       <div class="imagine">
-        <img class ='imagine_produs'src="{{produs.poza.url}}" alt="{{ produs.nume }}" />
+        {% if produs.poza %}
+        <img
+          class="imagine_produs"
+          src="{{produs.poza.url}}"
+          alt="{{ produs.nume }}"
+        />
+        {% else %}
+        <img
+          class="imagine_produs"
+          src="{% static 'aplicatie_exemplu/images/doll.png' %}"
+          alt="Fără imagine"
+        />
+        {% endif %}
       </div>
       <div class="descriere">
         <h2>{{produs.nume}}</h2>
         {%if produs.stoc == 0%}
-        <p class='out_stoc'>Stoc epuizat</p>
+        <p class="out_stoc">Stoc epuizat</p>
         {%else%}
-        <p class='in_stoc'>In stoc</p>
+        <p class="in_stoc">In stoc</p>
         {%endif%}
         <p class="pret">Pret: {{produs.pret}} RON</p>
       </div>
-    </div>
     </a>
-    {%endfor%}
-
-  </div>
-
-  <div class='page_bar'>
-    <p class='pag'>Pagina {{pagina.number}}</p>
-    {%if pagina.has_previous%}
-    <a href='?pagina={{pagina.previous_page_number}}'>
-    <button class='page_button'>
-    &laquo;
-    </button></a>
-    {%else%}
-    <button class='page_button indisp'>&laquo;</button>
-    {%endif%}
-    {%if pagina.has_next%}
-    <a href='?pagina={{pagina.next_page_number}}'><button class='page_button'>
-    &raquo;
-    </button></a>
-    {%else%}
-    <button class='page_button indisp'>&raquo;</button>
+    {%if produs.stoc > 0%}
+    <button
+      class="add-to-cart-btn"
+      data-add-to-cart
+      data-id="{{produs.id}}"
+      data-nume="{{produs.nume|escapejs}}"
+      data-pret="{{produs.pret}}"
+      data-poza="{% if produs.poza %}{{produs.poza.url}}{% endif %}"
+    >
+      Adaugă în Coș
+    </button>
     {%endif%}
   </div>
-  {%endblock%}
+  {%endfor%}
+</div>
+
+<div class="mesaj-eroare">
+  {% if mesaj_eroare %}
+  <p>{{ mesaj_eroare }}</p>
+  {% endif %}
+</div>
+
+<div class="page_bar">
+  <p class="pag">Pagina {{pagina.number}}</p>
+  {%if pagina.has_previous%}
+  <a href="?pagina={{pagina.previous_page_number}}"
+    ><button class="page_button">&laquo;</button></a
+  >
+  {%else%}
+  <button class="page_button indisp">&laquo;</button>
+  {%endif%} {%if pagina.has_next%}
+  <a href="?pagina={{pagina.next_page_number}}"
+    ><button class="page_button">&raquo;</button></a
+  >
+  {%else%}
+  <button class="page_button indisp">&raquo;</button>
+  {%endif%}
+</div>
+
+<script>
+  function resetFiltre() {
+    window.location.href = "{% url 'produs' %}";
+  }
+</script>
+{%endblock%}

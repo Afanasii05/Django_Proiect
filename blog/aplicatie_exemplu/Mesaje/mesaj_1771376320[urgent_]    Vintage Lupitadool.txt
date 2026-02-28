@@ -1,0 +1,18 @@
+{
+    "nume": "Vintage Lupitadool",
+    "prenume": "Mun",
+    "CNP": "1121212214321",
+    "data_nasterii": "1999-12-12",
+    "email": "fanelmunteanu568@gmail.com",
+    "tip_mesaj": "intrebare",
+    "subiect": "UnCeva",
+    "minim_zile_asteptare": 4,
+    "mesaj": "Un mesaj interesant foarte Vintage",
+    "urgent": true,
+    "varsta": "26 ani și 2 luni",
+    "ip": "127.0.0.1",
+    "data_trimiterii": [
+        "Miercuri, 18 februarie 2026",
+        "02:58:40"
+    ]
+}

@@ -1,0 +1,29 @@
+{% extends 'aplicatie_exemplu/baza.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'aplicatie_exemplu/css/inregistrare.css' %}" />
+
+<div class="form-container shadow">
+    <h2>Autentificare</h2>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        
+        {% for field in form %}
+            <p>
+                <label>{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <span class="errorlist">{{ field.errors }}</span>
+                {% endif %}
+            </p>
+        {% endfor %}
+        
+        <button type="submit" class="btn btn-primary">Intră în cont</button>
+    </form>
+    
+    <p class="text-center mt-3">
+        Nu ai cont? <a href="{% url 'register' %}">Înregistrează-te aici</a>
+    </p>
+</div>
+{% endblock %}

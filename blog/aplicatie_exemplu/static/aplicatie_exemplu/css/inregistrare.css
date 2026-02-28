@@ -1,0 +1,170 @@
+/* inregistrare.css — Amigurumi Theme */
+
+/* Container */
+.container.mt-5 {
+    max-width: 600px;
+    background: #ffffff;
+    padding: 40px;
+    margin-top: 3rem !important;
+    margin-bottom: 3rem !important;
+    border-radius: 18px;
+    box-shadow: 0 12px 40px rgba(232, 143, 171, 0.1);
+}
+
+.form-container {
+    max-width: 500px;
+    margin: 3rem auto;
+    background: #fff;
+    padding: 40px;
+    border-radius: 18px;
+    box-shadow: 0 12px 40px rgba(232, 143, 171, 0.1);
+}
+
+/* Titlu */
+h2 {
+    color: #5c5c5c;
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 1.5rem;
+    border-bottom: 2px solid #f2a2b9;
+    padding-bottom: 12px;
+}
+
+/* Form rows */
+form p {
+    margin-bottom: 18px;
+}
+
+/* Labels */
+form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #777;
+    font-size: 0.95rem;
+}
+
+/* Inputs */
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form input[type="date"],
+form input[type="number"],
+form select,
+form textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1.5px solid #e8dfe0;
+    border-radius: 10px;
+    font-size: 1rem;
+    background-color: #fdf6f7;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    font-family: 'Nunito', sans-serif;
+}
+
+form input:focus,
+form select:focus,
+form textarea:focus {
+    border-color: #f2a2b9;
+    background-color: #fff;
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(232, 143, 171, 0.1);
+}
+
+/* Help text */
+.helptext {
+    display: block;
+    font-size: 0.8rem;
+    color: #aaa;
+    margin-top: 5px;
+}
+
+/* Errors */
+.errorlist {
+    color: #e74c3c;
+    list-style: none;
+    padding: 0;
+    margin: 5px 0 0 0;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+/* Primary Button */
+.btn-primary {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #f2a2b9, #e88fab);
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    box-shadow: 0 6px 25px rgba(232, 143, 171, 0.3);
+    font-family: 'Nunito', sans-serif;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(232, 143, 171, 0.4);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+/* Links */
+.text-center a {
+    color: #e88fab;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.text-center a:hover {
+    color: #d97aa0;
+    text-decoration: underline;
+}
+
+/* Profile card header */
+.card-header.bg-primary {
+    background: linear-gradient(135deg, #f2a2b9, #e88fab) !important;
+    border: none;
+}
+
+/* Profile buttons */
+.btn-warning {
+    background: linear-gradient(135deg, #f2a2b9, #e88fab);
+    border: none;
+    color: white;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+.btn-warning:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(232, 143, 171, 0.3);
+}
+
+.btn-outline-danger {
+    border: 2px solid #e88fab;
+    color: #e88fab;
+    background: transparent;
+    padding: 10px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-danger:hover {
+    background: #fde4e8;
+    border-color: #d97aa0;
+    color: #d97aa0;
+}

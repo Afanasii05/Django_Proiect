@@ -1,0 +1,99 @@
+/* contact.css — Amigurumi Theme */
+
+.container.mt-5 {
+    max-width: 700px;
+    width: 90%;
+    background: #ffffff;
+    padding: 50px;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(232, 143, 171, 0.1);
+    margin-top: 3rem !important;
+    margin-bottom: 3rem !important;
+}
+
+h2 {
+    text-align: center;
+    font-weight: 700;
+    color: #5c5c5c;
+    margin-bottom: 35px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 1.6rem;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #777;
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+input.form-control,
+select.form-select,
+textarea.form-control {
+    width: 100%;
+    padding: 14px 20px;
+    border: 1.5px solid #e8dfe0;
+    border-radius: 10px;
+    background-color: #fdf6f7;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    font-family: 'Nunito', sans-serif;
+}
+
+input.form-control:focus,
+textarea.form-control:focus {
+    border-color: #f2a2b9;
+    box-shadow: 0 0 0 4px rgba(232, 143, 171, 0.1);
+    outline: none;
+    background: #fff;
+}
+
+textarea.form-control {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #f2a2b9, #e88fab);
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    box-shadow: 0 6px 25px rgba(232, 143, 171, 0.3);
+    font-family: 'Nunito', sans-serif;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(232, 143, 171, 0.4);
+}
+
+.text-danger {
+    color: #e53e3e;
+    font-size: 0.85rem;
+    margin-top: 6px;
+    display: block;
+}
+
+.alert-danger {
+    background-color: #fff5f5;
+    border: 1px solid #feb2b2;
+    color: #c53030;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+}
