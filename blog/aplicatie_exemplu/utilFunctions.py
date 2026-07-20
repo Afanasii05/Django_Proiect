@@ -1,7 +1,13 @@
 import datetime
 import locale
 def functie_de_data():
-    locale.setlocale(locale.LC_TIME, 'Romanian')
+    try:
+        locale.setlocale(locale.LC_TIME, 'ro_RO.UTF-8')
+    except locale.Error:
+        try:
+            locale.setlocale(locale.LC_TIME, 'Romanian')
+        except locale.Error:
+            pass
     acum = datetime.datetime.now()
     data_formatata = acum.strftime('%A, %d %B %Y').capitalize()
     ora_formatata = acum.strftime('%H:%M:%S')
