@@ -151,7 +151,16 @@ const Cart = {
       return;
     }
 
+    // Payment notice
     var html =
+      '<div class="cart-notice">' +
+      '<span class="notice-icon">ℹ️</span>' +
+      '<div class="notice-text">' +
+      '<strong>Notă importantă:</strong> Plata nu se efectuează online acum. Comanda va fi finalizată și detaliile de plată vor fi stabilite după ce veți fi contactat pe Instagram.' +
+      '</div>' +
+      '</div>';
+
+    html +=
       '<table class="cart-table">' +
       "<thead><tr>" +
       "<th>Produs</th><th>Preț unitar</th><th>Cantitate</th><th>Subtotal</th><th></th>" +
@@ -232,17 +241,48 @@ const Cart = {
       '<span class="total-label">Total de plată:</span>' +
       '<span class="total-value">' +
       totalFinal.toFixed(2) +
-      " RON</span></div>" +
+      " RON</span></div>";
+
+    // Instagram and Location Form Inputs
+    html +=
+      '<div class="checkout-form">' +
+      '<h3>Detalii Contact & Livrare</h3>' +
+      '<div class="form-group">' +
+      '<label for="instagram-input">Nume cont Instagram <span class="required">*</span></label>' +
+      '<input type="text" id="instagram-input" class="form-input" placeholder="ex: @nume_utilizator" required>' +
+      '</div>' +
+      '<div class="form-group">' +
+      '<label for="locatie-input">Locație / Adresă Completă <span class="required">*</span></label>' +
+      '<textarea id="locatie-input" class="form-input" placeholder="Oraș, Județ, Adresă completă de livrare" rows="2" required></textarea>' +
+      '</div>' +
+      '<div id="checkout-error" class="checkout-error-msg" style="display:none;"></div>' +
+      '</div>';
+
+    html +=
       '<div class="cart-actions">' +
       '<button class="btn btn-secondary" id="clear-cart-btn">Golește Coșul</button>' +
       '<a href="/produs/" class="btn btn-outline">Continuă Cumpărăturile</a>' +
-      '<button class="btn btn-success">Finalizează Comanda</button>' +
+      '<button class="btn btn-success" id="checkout-btn">Finalizează Comanda</button>' +
       "</div></div>";
 
     container.innerHTML = html;
 
     // Bind events on rendered elements
     this._bindCartEvents();
+  },
+
+  renderSuccessPage: function (instagram) {
+    var container = document.getElementById("cart-content");
+    if (!container) return;
+
+    container.innerHTML =
+      '<div class="cart-success">' +
+      '<div class="success-icon">🎉</div>' +
+      "<h2>Comandă Trimisă cu Succes!</h2>" +
+      "<p>Detaliile coșului tău au fost trimise prin e-mail.</p>" +
+      '<p class="contact-notice">Te vom contacta în curând pe contul de Instagram <strong>' + instagram + '</strong> pentru stabilirea detaliilor de plată și livrare.</p>' +
+      '<a href="/produs/" class="btn btn-primary" style="margin-top: 1.5rem;">Înapoi la Produse</a>' +
+      "</div>";
   },
 
   _bindCartEvents: function () {
@@ -274,6 +314,84 @@ const Cart = {
         self.removeFromCart(id);
       });
     });
+
+    // Checkout/Finalizează comanda submit
+    var checkoutBtn = document.getElementById("checkout-btn");
+    if (checkoutBtn) {
+      checkoutBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        
+        var instagramInput = document.getElementById("instagram-input");
+        var locatieInput = document.getElementById("locatie-input");
+        var errorDiv = document.getElementById("checkout-error");
+        
+        var instagram = instagramInput ? instagramInput.value.trim() : "";
+        var locatie = locatieInput ? locatieInput.value.trim() : "";
+        
+        if (!instagram || !locatie) {
+          if (errorDiv) {
+            errorDiv.textContent = "Vă rugăm să completați atât numele contului de Instagram, cât și locația.";
+            errorDiv.style.display = "block";
+          }
+          return;
+        }
+        
+        if (errorDiv) {
+          errorDiv.style.display = "none";
+        }
+        
+        // Disable checkout button to prevent double submit
+        checkoutBtn.disabled = true;
+        checkoutBtn.textContent = "Se trimite comanda...";
+        
+        var cartData = self.getCart();
+        var csrfToken = "";
+        var cartContainer = document.querySelector(".cart-container");
+        if (cartContainer) {
+          csrfToken = cartContainer.getAttribute("data-csrf") || "";
+        }
+        
+        fetch("/trimite_comanda/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken
+          },
+          body: JSON.stringify({
+            instagram: instagram,
+            locatie: locatie,
+            cart: cartData
+          })
+        })
+        .then(function (response) {
+          return response.json();
+        })
+        .then(function (res) {
+          if (res.success) {
+            // Clear cart from storage and update badge without calling full renderCartPage (which would show empty cart)
+            localStorage.removeItem("shoppingCart");
+            self.updateCartBadge();
+            self.renderSuccessPage(instagram);
+          } else {
+            checkoutBtn.disabled = false;
+            checkoutBtn.textContent = "Finalizează Comanda";
+            if (errorDiv) {
+              errorDiv.textContent = res.error || "A apărut o eroare la trimiterea comenzii. Încercați din nou.";
+              errorDiv.style.display = "block";
+            }
+          }
+        })
+        .catch(function (err) {
+          checkoutBtn.disabled = false;
+          checkoutBtn.textContent = "Finalizează Comanda";
+          if (errorDiv) {
+            errorDiv.textContent = "Eroare de rețea. Vă rugăm să verificați conexiunea la internet.";
+            errorDiv.style.display = "block";
+          }
+          console.error("Error submitting order:", err);
+        });
+      });
+    }
   },
 };
 

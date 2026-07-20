@@ -24,6 +24,7 @@ urlpatterns = [
     path('profil/', views.profil_view, name='profil'),
     path('email_confirmare/<str:cod>/', views.email_confirmare, name='email_confirmare'),
     path('cart/', views.cart_view, name='cart'),
+    path('trimite_comanda/', views.trimite_comanda, name='trimite_comanda'),
 ]   
 
 if settings.DEBUG:

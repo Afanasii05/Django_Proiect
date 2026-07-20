@@ -390,4 +390,71 @@ def email_confirmare(request, cod):
 def cart_view(request):
     """View for displaying the shopping cart page"""
     return render(request, 'aplicatie_exemplu/cart.html')
+
+
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+
+@require_POST
+def trimite_comanda(request):
+    try:
+        data = json.loads(request.body)
+        instagram = data.get('instagram', '').strip()
+        locatie = data.get('locatie', '').strip()
+        cart = data.get('cart', [])
+        
+        if not instagram or not locatie:
+            return JsonResponse({'success': False, 'error': 'Numele de Instagram și locația sunt obligatorii.'}, status=400)
+        
+        if not cart or not isinstance(cart, list):
+            return JsonResponse({'success': False, 'error': 'Coșul de cumpărături este gol.'}, status=400)
+        
+        # Build email body
+        email_subject = f"Comandă Nouă Amigurumi - @{instagram}"
+        
+        email_body = f"A fost înregistrată o nouă comandă pe site-ul Amigurumi World!\n\n"
+        email_body += f"Detalii Client:\n"
+        email_body += f"----------------------------------------\n"
+        email_body += f"Nume cont Instagram: @{instagram}\n"
+        email_body += f"Locație / Adresă: {locatie}\n"
+        email_body += f"Data: {datetime.datetime.now().strftime('%d-%m-%Y %H:%M:%S')}\n\n"
+        
+        email_body += f"Produse Comandate:\n"
+        email_body += f"----------------------------------------\n"
+        
+        subtotal = 0
+        for index, item in enumerate(cart, 1):
+            item_nume = item.get('nume', 'Produs necunoscut')
+            item_pret = float(item.get('pret', 0))
+            item_cantitate = int(item.get('quantity', 1))
+            item_subtotal = item_pret * item_cantitate
+            subtotal += item_subtotal
+            
+            email_body += f"{index}. {item_nume}\n"
+            email_body += f"   Cantitate: {item_cantitate} x {item_pret:.2f} RON\n"
+            email_body += f"   Subtotal: {item_subtotal:.2f} RON\n\n"
+            
+        livrare_gratuita = subtotal >= 200
+        cost_livrare = 0 if livrare_gratuita else 15
+        total_final = subtotal + cost_livrare
+        
+        email_body += f"----------------------------------------\n"
+        email_body += f"Subtotal produse: {subtotal:.2f} RON\n"
+        email_body += f"Cost livrare: {'GRATUITĂ' if livrare_gratuita else f'{cost_livrare:.2f} RON'}\n"
+        email_body += f"TOTAL DE PLATĂ: {total_final:.2f} RON\n"
+        email_body += f"----------------------------------------\n\n"
+        email_body += f"Contactați clientul pe Instagram pentru confirmare și detalii de plată."
+        
+        send_mail(
+            subject=email_subject,
+            message=email_body,
+            from_email='webmaster@localhost',
+            recipient_list=['fanelmunteanu568@gmail.com'],
+            fail_silently=False,
+        )
+        
+        return JsonResponse({'success': True, 'message': 'Comanda a fost trimisă cu succes!'})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': f'Eroare la procesarea comenzii: {str(e)}'}, status=500)
+
     
