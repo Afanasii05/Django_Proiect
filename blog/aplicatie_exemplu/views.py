@@ -316,7 +316,7 @@ def inregistrare_utilizator(request):
             send_mail(
                 subject='Confirmare înregistrare',
                 message=f'Bun venit, {user.first_name}! Pentru a-ti confirma inregistrarea, te rugam sa accesezi urmatorul link: {link_confirmare}',
-                from_email='admin@exemplu.ro',
+                from_email='fanelmunteanu568@gmail.com',
                 recipient_list=[user.email],
                 )
             
@@ -448,7 +448,7 @@ def trimite_comanda(request):
         send_mail(
             subject=email_subject,
             message=email_body,
-            from_email='webmaster@localhost',
+            from_email='fanelmunteanu568@gmail.com',
             recipient_list=['fanelmunteanu568@gmail.com'],
             fail_silently=False,
         )
