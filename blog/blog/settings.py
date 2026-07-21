@@ -11,7 +11,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,12 +23,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-_h0!p4at+7)bp_%(@6usk5$#$s-5@zi-+7w3fyx(jt6taryv^('
-
+SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['138.197.185.91', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['amigurumitoys.page', 'www.amigurumitoys.page','138.197.185.91', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -134,12 +136,13 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = '/var/www/amigurumitoys/media/'
 AUTH_USER_MODEL = 'aplicatie_exemplu.UtilizatorPersonalizat'
 # Email Settings - Using Brevo HTTP API (Not blocked by VPS)
 import os
 ANYMAIL = {
-    "BREVO_API_KEY": os.environ.get("BREVO_API_KEY", "cheia_ta_brevo_aici"),
+    "BREVO_API_KEY": os.getenv("BREVO_API_KEY"),
 }
 EMAIL_BACKEND = "anymail.backends.brevo.EmailBackend"
-DEFAULT_FROM_EMAIL = "fanelmunteanu568@gmail.com"
+DEFAULT_FROM_EMAIL = "fanelmunteanu568@gmail.com"
+STATIC_ROOT = '/var/www/amigurumitoys/static/'
